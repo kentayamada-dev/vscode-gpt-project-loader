@@ -1,0 +1,83 @@
+{
+  "name": "vscode-gpt-project-loader",
+  "displayName": "VSCode GPT Project Loader",
+  "version": "1.0.0",
+  "description": "This VSCode extension converts the contents of a selected project into a structured text format. It preserves the file hierarchy and content, making it easy to use for GPT-based tasks such as code review, documentation generation, or AI-assisted development.",
+  "main": "./dist/extension.js",
+  "author": {
+    "name": "Kenta Yamada"
+  },
+  "markdown": "github",
+  "publisher": "kentayamada",
+  "license": "SEE LICENSE IN LICENSE",
+  "pricing": "Free",
+  "homepage": "https://github.com/kentayamada-dev/vscode-gpt-project-loader/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentayamada-dev/vscode-gpt-project-loader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kentayamada-dev/vscode-gpt-project-loader/issues"
+  },
+  "icon": "./assets/icon.png",
+  "galleryBanner": {
+    "color": "#FFFFFF",
+    "theme": "light"
+  },
+  "keywords": [
+    "project",
+    "gpt",
+    "automation",
+    "documentation",
+    "workflow"
+  ],
+  "engines": {
+    "vscode": "^1.71.0",
+    "pnpm": "9.9.0",
+    "node": "22.7.0",
+    "npm": "please-use-pnpm"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning"
+  ],
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-gpt-project-loader.convertProjectToText",
+        "title": "Convert Project to Text for GPT"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "GPT Project Loader Settings",
+      "properties": {
+        "gptProjectLoader.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".git"
+          ],
+          "markdownDescription": "Specify files or directories to exclude from the file selection. Default: `[\".git\"]`."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "pnpm run check-types && node esbuild.js",
+    "check-types": "tsc --noEmit",
+    "package": "npm run check-types && node esbuild.js --production",
+    "vscode:prepublish": "pnpm run package",
+    "vsce-publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.2",
+    "@types/vscode": "1.71.0",
+    "@vscode/vsce": "3.0.0",
+    "esbuild": "0.23.1",
+    "typescript": "5.5.4"
+  }
+}
