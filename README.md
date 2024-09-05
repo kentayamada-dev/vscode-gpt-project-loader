@@ -1,6 +1,6 @@
 # VSCode GPT Project Loader
 
-The **VSCode GPT Project Loader** is a Visual Studio Code extension that converts the contents of a selected project into a structured text format, making it perfect for GPT-based tasks like code review, documentation generation, or AI-assisted development.
+This VSCode extension converts the contents of a selected project into a structured text format, making it perfect for GPT-based tasks like code review, documentation generation, or AI-assisted development.
 
 ## Features
 
