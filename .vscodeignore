@@ -1,7 +1,6 @@
 # Ignore
 tsconfig.json
 pnpm-lock.yaml
-CHANGELOG.md
 .gitignore
 dist/*
 src/*
