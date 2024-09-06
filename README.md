@@ -49,12 +49,3 @@ This extension contributes the following settings:
 ## Known Issues
 
 - No issues have been reported yet. Please report any issues you encounter via the [GitHub issues page](https://github.com/kentayamada-dev/vscode-gpt-project-loader/issues).
-
-## Release Notes
-
-### 1.0.0
-
-- Initial release of **VSCode GPT Project Loader**.
-- Project content to text conversion with file structure preservation.
-- Added support for ignoring specific files and marking binary files as `Not Viewable`.
-- User-selectable files for output generation.
