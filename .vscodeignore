@@ -8,6 +8,7 @@ assets/*
 .vscode/*
 .devcontainer/*
 esbuild.js
+.prettierignore
 
 # Keep
 !dist/extension.js

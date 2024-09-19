@@ -1,22 +1,22 @@
-const esbuild = require("esbuild");
+const esbuild = require('esbuild');
 
-const production = process.argv.includes("--production");
+const production = process.argv.includes('--production');
 
 async function main() {
-  const ctx = await esbuild.context({
-    entryPoints: ["src/extension.ts"],
+  await esbuild.build({
+    entryPoints: ['src/extension.ts'],
     bundle: true,
-    format: "cjs",
+    format: 'cjs',
     minify: production,
     sourcemap: !production,
+    minify: true,
     sourcesContent: false,
-    platform: "node",
-    outfile: "dist/extension.js",
-    external: ["vscode"],
-    logLevel: "silent",
+    platform: 'node',
+    outfile: 'dist/extension.js',
+    external: ['vscode'],
+    treeShaking: true,
+    logLevel: 'silent'
   });
-  await ctx.rebuild();
-  await ctx.dispose();
 }
 
 main().catch((e) => {

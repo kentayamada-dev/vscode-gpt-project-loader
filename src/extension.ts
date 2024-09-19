@@ -1,65 +1,54 @@
-import * as vscode from "vscode";
-import * as fs from "node:fs/promises";
-import * as path from "path";
-import * as os from "os";
-import binaryExtensions from "./binary-extensions.json";
+import vscode from 'vscode';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { relative } from 'path';
+import binaryExtensions from './binary-extensions.json';
 
 export function activate(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand(
-    "vscode-gpt-project-loader.convertProjectToText",
-    async () => {
-      const folderUri = await vscode.window.showOpenDialog({
-        canSelectFolders: true,
-        defaultUri: vscode.Uri.file(os.homedir()),
+  const disposable = vscode.commands.registerCommand('vscode-gpt-project-loader.convertProjectToText', async () => {
+    const folderUri = await vscode.window.showOpenDialog({
+      canSelectFolders: true,
+      defaultUri: vscode.workspace.workspaceFolders?.[0]?.uri || vscode.Uri.file(process.cwd())
+    });
+    const selectedDir = folderUri?.[0]?.path;
+    if (selectedDir) {
+      const excludeFiles = vscode.workspace.getConfiguration('gptProjectLoader').get<string[]>('exclude', []);
+
+      const allFiles = await getAllFiles(selectedDir, excludeFiles);
+
+      const includedFiles = await vscode.window.showQuickPick(allFiles, {
+        canPickMany: true,
+        placeHolder: 'Select files to include in the output'
       });
-      const selectedDir = folderUri?.[0]?.fsPath;
-      if (selectedDir) {
-        const config = vscode.workspace.getConfiguration("gptProjectLoader");
-        const ignoredFiles = config.get<string[]>("exclude", []);
 
-        const allFiles = await getAllFiles(selectedDir, ignoredFiles);
-
-        const includedFiles = await vscode.window.showQuickPick(allFiles, {
-          canPickMany: true,
-          placeHolder: "Select files to include in the output",
+      if (includedFiles) {
+        const content = await convertProjectToText(selectedDir, includedFiles);
+        const doc = await vscode.workspace.openTextDocument({
+          content
         });
-
-        if (includedFiles) {
-          const content = await convertProjectToText(
-            selectedDir,
-            includedFiles
-          );
-          const doc = await vscode.workspace.openTextDocument({
-            content,
-          });
-          vscode.window.showTextDocument(doc);
-        }
+        vscode.window.showTextDocument(doc);
       }
     }
-  );
+  });
   context.subscriptions.push(disposable);
 }
 
-async function getAllFiles(
-  dir: string,
-  ignoredFiles: string[]
-): Promise<string[]> {
+async function getAllFiles(dir: string, excludeFiles: string[]): Promise<string[]> {
   const files: string[] = [];
   const processDir = async (currentDir: string) => {
-    const dirItems = await fs.readdir(currentDir);
+    const dirItems = await readdir(currentDir);
     for (const item of dirItems) {
-      const fullPath = path.join(currentDir, item);
-      const stats = await fs.stat(fullPath);
+      const fullPath = `${currentDir}/${item}`;
 
-      if (ignoredFiles.some((ignored) => fullPath.includes(ignored))) {
+      if (excludeFiles.some((file) => fullPath.includes(file))) {
         continue;
       }
+
+      const stats = await stat(fullPath);
 
       if (stats.isDirectory()) {
         await processDir(fullPath);
       } else {
-        const relativePath = path.relative(dir, fullPath);
-        files.push(relativePath);
+        files.push(relative(dir, fullPath));
       }
     }
   };
@@ -67,43 +56,31 @@ async function getAllFiles(
   return files;
 }
 
-async function convertProjectToText(
-  baseDir: string,
-  includedFiles: string[]
-): Promise<string> {
+async function convertProjectToText(baseDir: string, includedFiles: string[]): Promise<string> {
   let output =
-    "The following text is a project with code. The structure of the text are sections that begin with ----, followed by a single line containing the file path and file name, followed by a variable amount of lines containing the file contents. The text representing the project ends when the symbols --END-- are encountered. Any further text beyond --END-- are meant to be interpreted as instructions using the aforementioned project as context.\n\n";
+    'The following text is a project with code. The structure of the text are sections that begin with ----, followed by a single line containing the file path and file name, followed by a variable amount of lines containing the file contents. The text representing the project ends when the symbols --END-- are encountered. Any further text beyond --END-- are meant to be interpreted as instructions using the aforementioned project as context.\n\n';
 
   for (const relativeFilePath of includedFiles) {
-    const absoluteFilePath = path.join(baseDir, relativeFilePath);
-    const fileExtension = getFileExtension(absoluteFilePath);
+    const fileExtension = getFileExtension(relativeFilePath);
 
-    output += "----\n";
+    output += '----\n';
     output += `${relativeFilePath}\n`;
 
     if (binaryExtensions.includes(fileExtension)) {
-      output += "Not Viewable\n\n";
+      output += 'Not Viewable\n\n';
     } else {
-      const fileContent = await fs.readFile(absoluteFilePath);
-      output += fileContent + "\n";
+      const fileContent = await readFile(`${baseDir}/${relativeFilePath}`);
+      output += fileContent + '\n';
     }
   }
-  output += "--END--";
+  output += '--END--';
   return output;
 }
 
-function getFileExtension(filePath: string) {
-  const fileName = path.basename(filePath);
+function getFileExtension(fileName: string) {
+  const lastIndexOfFileName = fileName.lastIndexOf('.');
 
-  if (
-    fileName.startsWith(".") &&
-    fileName.indexOf(".") === 0 &&
-    fileName.lastIndexOf(".") === 0
-  ) {
-    return fileName.substring(1);
-  }
-
-  return path.extname(filePath).substring(1);
+  return fileName.startsWith('.') && lastIndexOfFileName === 0
+    ? fileName.substring(1)
+    : fileName.substring(lastIndexOfFileName + 1);
 }
-
-export function deactivate() {}
