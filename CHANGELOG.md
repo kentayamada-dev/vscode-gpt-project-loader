@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.2] - 2024-10-03
+
+### Fixes
+
+- **Fixed Path Handling on Windows**: Resolved an issue with incorrect path concatenation that led to errors when running the extension on Windows.
+
+### Improvements
+
+- **Cross-Platform Compatibility**: Improved how the extension manages paths and directories, ensuring consistent behavior across both Unix-like systems and Windows.
+
 ## [1.0.1] - 2024-09-19
 
 ### Improvements

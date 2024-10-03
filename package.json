@@ -1,7 +1,7 @@
 {
   "name": "vscode-gpt-project-loader",
   "displayName": "VSCode GPT Project Loader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This VSCode extension converts the contents of a selected project into a structured text format. It preserves the file hierarchy and content, making it easy to use for GPT-based tasks such as code review, documentation generation, or AI-assisted development.",
   "main": "./dist/extension.js",
   "author": {

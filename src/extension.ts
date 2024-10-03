@@ -1,6 +1,6 @@
 import vscode from 'vscode';
 import { readFile, readdir, stat } from 'node:fs/promises';
-import { relative } from 'path';
+import { relative, join } from 'path';
 import binaryExtensions from './binary-extensions.json';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -37,7 +37,7 @@ async function getAllFiles(dir: string, excludeFiles: string[]): Promise<string[
   const processDir = async (currentDir: string) => {
     const dirItems = await readdir(currentDir);
     for (const item of dirItems) {
-      const fullPath = `${currentDir}/${item}`;
+      const fullPath = join(currentDir, item);
 
       if (excludeFiles.some((file) => fullPath.includes(file))) {
         continue;
