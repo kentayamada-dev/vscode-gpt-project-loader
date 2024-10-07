@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3] - 2024-10-07
+
+### Improvements
+
+- **Progress Indicators**: Added progress notifications when scanning directories and generating output, improving the user experience during long-running operations.
+- **Error Handling**: Clearer error messages when no folder or files are selected, improving user feedback and guiding actions.
+
 ## [1.0.2] - 2024-10-03
 
 ### Fixes
