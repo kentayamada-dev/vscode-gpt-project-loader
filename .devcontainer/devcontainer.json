@@ -1,14 +1,10 @@
 {
   "name": "${localWorkspaceFolderBasename}",
-  "build": {
-    "args": {
-      "USER_NAME": "dev",
-      "UID": "2000",
-      "NODE_VERSION": "22.7.0",
-      "PNPM_VERSION": "9.9.0"
-    },
-    "dockerfile": "./Dockerfile",
-    "context": ".."
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/pnpm:2.0.5": {
+      "version": "9.15.9"
+    }
   },
   "runArgs": [
     "--hostname",
@@ -23,18 +19,8 @@
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
       },
-      "extensions": [
-        "Exelord.git-commits",
-        "mhutchie.git-graph",
-        "kentayamada.vscode-statusbar-commands",
-        "esbenp.prettier-vscode"
-      ]
+      "extensions": ["kentayamada.vscode-statusbar-commands", "esbenp.prettier-vscode"]
     }
   },
-  "postCreateCommand": "pnpm install",
-  "workspaceFolder": "/home/dev/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=${containerWorkspaceFolder},type=bind",
-  "mounts": [
-    "source=${localWorkspaceFolderBasename}_node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
-  ]
+  "postCreateCommand": "pnpm install"
 }

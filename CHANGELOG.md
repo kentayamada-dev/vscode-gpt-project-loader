@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2025-06-23
+
+### Documentation
+
+- Added `Contributions` section in the README.
+
 ## [1.0.3] - 2024-10-07
 
 ### Improvements

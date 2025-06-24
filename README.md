@@ -46,6 +46,19 @@ This extension contributes the following settings:
 
 - `gptProjectLoader.exclude`: Specify files or directories to exclude from the file selection. Default: `[".git"]`.
 
+## Contributions
+
+We love contributions from everyone - whether you’re reporting bugs, requesting features, improving docs, or sending code! Below is how to get started and contribute.
+
+### Local Development Setup
+
+We use [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) to standardize our development environment. The dev container configuration files are already provided in the `.devcontainer/` folder.
+
+1. Install the **Dev Containers** extension in VS Code.
+2. Clone this repository.
+3. From the Command Palette (⇧⌘P / Ctrl+Shift+P), choose **Dev Containers: Reopen in Container**.
+4. Once inside, your dev environment is ready!
+
 ## Known Issues
 
 - No issues have been reported yet. Please report any issues you encounter via the [GitHub issues page](https://github.com/kentayamada-dev/vscode-gpt-project-loader/issues).
